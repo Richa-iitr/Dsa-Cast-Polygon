@@ -1,0 +1,16 @@
+{
+  "name": "Dsa-Cast-Polygon",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ Richa-iitr/Dsa-Cast-Polygon",
+    "create-local": "graph create --node http://localhost:8020/ Richa-iitr/Dsa-Cast-Polygon",
+    "remove-local": "graph remove --node http://localhost:8020/ Richa-iitr/Dsa-Cast-Polygon",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Richa-iitr/Dsa-Cast-Polygon"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.30.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  }
+}
