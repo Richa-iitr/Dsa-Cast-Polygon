@@ -1,35 +1,78 @@
-specVersion: 0.0.1
+specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: undefined
+    name: InstaIndex
     network: matic
     source:
       address: "0xA9B99766E6C676Cf1975c0D3166F96C0848fF5ad"
       abi: InstaIndex
+      startBlock: 12795000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - LogAccountCreated
-        - LogNewAccount
-        - LogNewCheck
-        - LogNewMaster
-        - LogUpdateMaster
+        - Account
+        - Count
       abis:
         - name: InstaIndex
           file: ./abis/InstaIndex.json
+        - name: InstaList
+          file: ./abis/InstaList.json
+        - name: InstaAccount
+          file: ./abis/InstaAccount.json
       eventHandlers:
         - event: LogAccountCreated(address,indexed address,indexed address,indexed address)
           handler: handleLogAccountCreated
-        - event: LogNewAccount(indexed address,indexed address,indexed address)
-          handler: handleLogNewAccount
-        - event: LogNewCheck(indexed uint256,indexed address)
-          handler: handleLogNewCheck
-        - event: LogNewMaster(indexed address)
-          handler: handleLogNewMaster
-        - event: LogUpdateMaster(indexed address)
-          handler: handleLogUpdateMaster
       file: ./src/insta-index.ts
+  - kind: ethereum/contract
+    name: ERC20
+    network: matic
+    source:
+      abi: ERC20
+      startBlock: 12795000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - TransferEvent
+        - ApprovalEvent
+        - Account
+        - CastEvent
+        - Transaction
+        - Count
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/erc20.ts
+
+templates:
+  - kind: ethereum/contract
+    name: InstaAccount
+    network: matic
+    source:
+      abi: InstaAccount
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - CastEvent
+        - Transaction
+        - Count
+      abis:
+        - name: InstaAccount
+          file: ./abis/InstaAccount.json
+      eventHandlers:
+        - event: LogCast(indexed address,indexed address,uint256,string[],address[],string[],bytes[])
+          handler: handleLogCast
+      file: ./src/insta-account.ts

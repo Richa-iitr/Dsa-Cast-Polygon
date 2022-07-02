@@ -1,6 +1,117 @@
-type ExampleEntity @entity {
+type CastEvent @entity {
   id: ID!
-  count: BigInt!
-  sender: Bytes! # address
-  owner: Bytes! # address
+  # event index
+  eventIndex: BigInt!
+  #sender - msg.sender
+  sender: Bytes!
+  #origin
+  origin: Bytes!
+  #value sent
+  value: BigInt!
+  # Targets Names
+  targetNames: [String!]!
+  # Events
+  eventsNames: [String!]!
+  # Event params
+  eventsParams: [Bytes!]!
+}
+
+type Transaction @entity {
+  # transaction hash
+  id: ID!
+  # transaction index
+  txnIndex: BigInt!
+  # transaction log index
+  txnLogIndex: BigInt!
+  # from
+  from: Bytes!
+  # to
+  to: Bytes
+  # input
+  input: Bytes!
+  # block number
+  blockNumber: BigInt!
+  # timestamp
+  timestamp: BigInt!
+  # gas
+  gasUsed: BigInt!
+  #gas price
+  gasPrice: BigInt!
+  # gas limit
+  gasLimit: BigInt!
+  #value
+  value: BigInt!
+  #status
+  status: BigInt!
+  #logs
+  logs: [Bytes!]!
+  #cumulative gas gasUsed
+  cumulativeGasUsed: BigInt!
+  #logsBloom
+  logsBloom: Bytes!
+  #root
+  root: Bytes!
+  # cast events
+  castEvents: [CastEvent!]!
+  # transfer events
+  transfers: [TransferEvent!]!
+  # approve events
+  approvals: [ApprovalEvent!]!
+}
+
+type Account @entity {
+  id: ID!
+  version: BigInt!
+  accountID: BigInt!
+  # Smart account address
+  address: Bytes!
+  # Address of the DSA creator
+  creator: Bytes!
+  # Total transactions of the DSA
+  transactionsCount: BigInt!
+  # Cast event data
+  transactions: [Transaction!]!
+}
+
+type Count @entity {
+  id: ID!
+  #total number of smart accounts
+  accountTotal: BigInt!
+  #total number of transactions
+  transactionTotal: BigInt!
+  #total number of castEvents
+  castEventTotal: BigInt!
+  #total number of transfer events
+  transferEventTotal: BigInt!
+  #total number of approvals
+  approvalEventTotal: BigInt!
+}
+
+type ApprovalEvent @entity {
+  id: ID!
+  token: Token!
+  from: Bytes!
+  # to or the spender address
+  to: Bytes!
+  # value approved or transaferred
+  value: BigInt!
+}
+
+type TransferEvent @entity {
+  id: ID!
+  token: Token!
+  from: Bytes!
+  # to or the spender address
+  to: Bytes!
+  # value approved or transaferred
+  value: BigInt!
+  # whether the transfer is with cast or not: 0 for false and 1 for true
+  withCast: BigInt!
+}
+
+type Token @entity {
+  id: ID!
+  name: String
+  symbol: String
+  decimals: BigInt
 }
